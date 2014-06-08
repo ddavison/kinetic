@@ -3,7 +3,7 @@ kinetic
 
 Kinetic is a handy tool that you can use to upload your code to remote sources.
 
-The name "kinetic" was inspired from the physical sense, where something moves from one place to another.
+The name "kinetic" was inspired from the physical sense, where the energy of force moves and object.
 
 # To Use
 
