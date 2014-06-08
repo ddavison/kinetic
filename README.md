@@ -22,5 +22,5 @@ This project was built with modularity in mind.
 
 PasteBin, is just one of the many potential use cases for this package.
 
-This package is potentially useful for private use.  By creating a module named myapp.coffee and following the [API (will link soon)](#),
-you are able to specify your own local url to share code with coworkers, or potentially even live changes.
+This package is potentially useful for private use.  By creating a module named `myapp.coffee` and following the [API](https://github.com/ddavison/kinetic/wiki/API),
+you are able to specify your own local url to share code with coworkers, or potentially even share live changes.
