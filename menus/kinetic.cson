@@ -1,0 +1,12 @@
+
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'Kinetic'
+      'submenu': [
+
+      ]
+    ]
+  }
+]

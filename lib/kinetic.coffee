@@ -1,0 +1,14 @@
+fs = require 'fs'
+
+module.exports =
+  modulesPath: atom.packages.packageDirPaths[0] + '/kinetic/lib/modules'
+
+  activate: ->
+    files = fs.readdirSync @modulesPath
+
+    for file in files
+      KineticModule = require './modules/' + file.split('.')[0]
+      m = new KineticModule()
+
+      atom.workspaceView.command "kinetic:upload-to-#{m.constructor.name}", =>
+        m.upload()

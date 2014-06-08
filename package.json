@@ -1,0 +1,16 @@
+{
+  "name": "kinetic",
+  "main": "./lib/kinetic",
+  "version": "0.1.0",
+  "description": "Share your code to an internet source",
+  "repository": "https://github.com/ddavison/kinetic",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "fs": "*",
+    "http": "*",
+    "querystring": "*"
+  }
+}
