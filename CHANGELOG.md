@@ -7,3 +7,6 @@
 ## 0.2.0
 * Added Gist module
 * Revamped / fixing module api
+
+## 0.2.1 - Fix for #2
+* Fixed #2 - Added setting to allow user to disable copying the resulting url to the clipboard.
