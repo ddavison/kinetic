@@ -1,9 +1,13 @@
 kinetic
 =====
 
-Kinetic is a handy tool that you can use to upload your code to remote sources.
+Kinetic is a handy tool that you can use to upload your code to remote sources!
 
 The name "kinetic" was inspired from the physical sense, where the energy of force moves and object.
+
+## Current Available Modules
+* PasteBin
+* GitHub Gist
 
 # To Use
 
@@ -14,7 +18,11 @@ The name "kinetic" was inspired from the physical sense, where the energy of for
 ![Module](https://raw.githubusercontent.com/ddavison/kinetic/master/images/module.png)
 
 ### Observe!
+#### PasteBin
 ![Observe](https://raw.githubusercontent.com/ddavison/kinetic/master/images/observe.png)
+
+#### Gist
+![Observe](https://raw.githubusercontent.com/ddavison/kinetic/master/images/observe-gist.png)
 
 ## Modular
 

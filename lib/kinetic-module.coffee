@@ -1,20 +1,28 @@
-http = require 'http'
+req = require 'request'
 querystring = require 'querystring'
 
 module.exports =
 class KineticModule
 
   MAX_ATTEMPTS: 5
-  method: 'POST'
-  encoding: 'utf8'
   contents: ''
   file_name: ''
   file_extension: ''
+  requestError: false
+  api_type: 'json' # default to json
 
-  constructor: (host, path, opts) ->
-    @host = host
-    @path = path
+  ###
+    @param url the url of the service
+    @param api_type json || form || body
+    @param opts the api options to use
+  ###
+  constructor: (url, api_type, opts) ->
     @opts = opts
+    @api_type = api_type
+    @request_opts =
+      'url': url,
+      headers:
+        'User-Agent': 'atom-kinetic'
 
     atom.menu.add [
       {
@@ -30,6 +38,9 @@ class KineticModule
         ]
       }
     ]
+
+    atom.workspaceView.command "kinetic:upload-to-#{@constructor.name}", =>
+      @upload()
 
   getFileContents: ->
     atom.workspace.getActiveEditor().buffer.cachedText
@@ -47,68 +58,81 @@ class KineticModule
     @opts[@file_extension] = @getFileExtension()
 
   upload: (attempt) ->
-    @before_upload() unless (@opts[@contents] && @opts[@file_name] && @opts[@file_extension])
+    try
+      @before_upload()
 
-    attempt = if attempt then (attempt + 1) else 1
+      attempt = if attempt then (attempt + 1) else 1
 
-    # send the request.. resp will be set.
-    @request((resp) =>
-      if !@check(resp)
-        @done(resp)
-      else if attempt < @MAX_ATTEMPTS
-        return @upload(attempt)
-      else
-        atom.confirm(
-          message: "@check() did not return correctly after #{@MAX_ATTEMPTS} tries.",
-          detailedMessage: "Please report this error to http://github.com/ddavison/kinetic/issues " +
-                           "with the following information:\n\n\t" +
-                           "file_name: #{@file_name}\n\t" +
-                           "opts: #{JSON.stringify(@opts)}\n\n" +
-                           "Response: #{resp}"
-        )
-        return
-
-      @after_upload(resp)
-    )
-
-  request: (callback) ->
-    data = querystring.stringify(@opts)
-
-    options =
-      host: @host,
-      port: 80,
-      path: @path,
-      method: @method,
-      headers:
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': data.length
-
-    req = http.request options, (response) =>
-      response.setEncoding(@encoding)
-      response.on('data',
-        (chunk) =>
-          callback(chunk)
+      # send the request..
+      @request((resp) =>
+        if !@check(resp)
+          @done(@after_upload(resp))
+        else if attempt < @MAX_ATTEMPTS
+          return @upload(attempt)
+        else
+          return atom.confirm(
+            message: "@check() did not return correctly after #{@MAX_ATTEMPTS} tries.",
+            detailedMessage: "Please report this error to http://github.com/ddavison/kinetic/issues " +
+                             "with the following information:\n\n\t" +
+                             "file_name: #{@file_name}\n\t" +
+                             "opts: #{JSON.stringify(@opts)}\n\n" +
+                             "Response: #{resp}\n\n" +
+                             "Request Headers: \n#{JSON.stringify(@request_opts)}"
+          ) if !@requestError # if there was a request error, just ignore it.
+          return
+      )
+    catch err
+      atom.confirm(
+        message: 'There was an error!'
+        detailedMessage: 'If you are feeling collaborative, itd help a lot if you posted the below information to ' +
+                         'http://github.com/ddavison/kinetic/issues\n\n' +
+                         "\tError: #{err}"
       )
 
-    req.write(data)
-    req.end()
+  request: (callback) ->
+    switch @api_type
+      when 'json'
+        @request_opts.json = @opts
+      when 'form'
+        @request_opts.form = @opts
+      else
+        @request_opts.body = querystring.stringify(@opts)
 
-  done: (resp) ->
-    atom.clipboard.write(resp)
-    atom.confirm(
-      message: "Your code has been uploaded to #{this.constructor.name}",
-      detailedMessage: "\n\t#{resp}\n\n\n this has been copied to your clipboard."
+    req.post(@request_opts, (error, response, body) =>
+      if !error and (response.statusCode == 200 || response.statusCode == 201)
+        callback(body)
+      else
+        atom.confirm(
+          message: 'There was an error with the request.',
+          detailedMessage: "The server responded with:\n" +
+                           "\tstatusCode: #{response.statusCode}\n" +
+                           "\terror: #{error}\n" +
+                           "\tbody: #{body}\n"
+        )
+        @requestError = true
     )
 
+  done: (final_url)->
+    atom.clipboard.write(final_url)
+    atom.confirm(
+      message: "Your code has been uploaded to #{this.constructor.name}",
+      detailedMessage: "\n\t#{final_url}\n\n\n this has been copied to your clipboard."
+    )
+
+  ###
+  # What to execute before @done() is called.
+  # Change this if you need to modify the returned data somehow.
+  ###
   after_upload: (resp) ->
-    # do nothing, unless overridden.
+    resp
 
   ###
   Middleware function to make sure that the upload is fine.  If not, make adjustments
   ###
   check: (resp) ->
+    console.log 'checking.. response: ' + resp
     atom.confirm(
       message: 'There was no response...',
       detailedMessage: "There was no response from:\n===\n#{@host + ' ' + @path}"
     ) if resp == ''
-    false
+    return false
