@@ -113,10 +113,14 @@ class KineticModule
     )
 
   done: (final_url)->
-    atom.clipboard.write(final_url)
+    add_msg = ''
+    if atom.config.get('kinetic.copyToClipboard')
+      atom.clipboard.write(final_url)
+      add_msg = 'this has been copied to your clipboard'
+
     atom.confirm(
       message: "Your code has been uploaded to #{this.constructor.name}",
-      detailedMessage: "\n\t#{final_url}\n\n\n this has been copied to your clipboard."
+      detailedMessage: "\n\t#{final_url}\n\n\n #{add_msg}"
     )
 
   ###
