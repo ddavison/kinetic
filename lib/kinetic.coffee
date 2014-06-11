@@ -9,6 +9,3 @@ module.exports =
     for file in files
       KineticModule = require './modules/' + file.split('.')[0]
       m = new KineticModule()
-
-      atom.workspaceView.command "kinetic:upload-to-#{m.constructor.name}", =>
-        m.upload()

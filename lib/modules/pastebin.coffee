@@ -12,7 +12,7 @@ class PasteBin extends KineticModule
   file_extension: 'api_paste_format'
 
   constructor: ->
-    super('pastebin.com', '/api/api_post.php',
+    super('http://pastebin.com/api/api_post.php', 'form'
       api_option: 'paste',
       api_dev_key: @getRandomDevKey() # there is a limit on pastes :(
       api_paste_private: '1' # 0=public,1=unlisted,2=private
@@ -21,13 +21,14 @@ class PasteBin extends KineticModule
 
   check: (resp) ->
     # default to text if the paste format is wrong.
-    if resp.indexOf @file_extension
+    if resp.indexOf @file_extension > -1
       @opts[@file_extension] = ''
       return true
 
-    if resp.indexOf 'Post limit'
+    if resp.indexOf 'Post limit' > -1
       @opts['api_dev_key'] = @getRandomDevKey()
       return true
+    return false
 
   getRandomDevKey: ->
     @dev_keys[Math.floor(Math.random() * @dev_keys.length)]
