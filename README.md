@@ -6,8 +6,9 @@ Kinetic is a handy tool that you can use to upload your code to remote sources!
 The name "kinetic" was inspired from the physical sense, where the energy of force moves and object.
 
 ## Current Available Modules
-* PasteBin
+* HasteBin
 * GitHub Gist
+* PasteBin
 
 # To Use
 

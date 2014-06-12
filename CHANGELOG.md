@@ -10,3 +10,6 @@
 
 ## 0.2.1 - Fix for #2
 * Fixed #2 - Added setting to allow user to disable copying the resulting url to the clipboard.
+
+## 0.2.2 - Fix for #7
+* Fixed #7 - Added HasteBin module.  You can now upload to HasteBin
