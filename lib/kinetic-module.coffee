@@ -1,5 +1,6 @@
 req = require 'request'
 querystring = require 'querystring'
+fs = require 'fs'
 
 module.exports =
 class KineticModule
@@ -11,6 +12,8 @@ class KineticModule
   requestError: false
   api_type: 'json' # default to json
 
+  headers: {}
+
   ###
     @param url the url of the service
     @param api_type json || form || body
@@ -21,8 +24,9 @@ class KineticModule
     @api_type = api_type
     @request_opts =
       'url': url,
-      headers:
-        'User-Agent': 'atom-kinetic'
+      headers: @headers
+
+    @request_opts.headers['User-Agent'] = 'atom-kinetic'
 
     atom.menu.add [
       {
@@ -47,6 +51,9 @@ class KineticModule
 
   getFileName: ->
     atom.workspaceView.find('.tab-bar .tab.active > div[data-name]').attr('data-name')
+
+  getFilePath: ->
+    atom.workspaceView.find('.tab-bar .tab.active > div[data-path]').attr('data-path')
 
   getFileExtension: ->
     fl = @getFileName().split('.')
@@ -97,6 +104,10 @@ class KineticModule
         @request_opts.form = @opts
       when 'text'
         @request_opts.body = @getFileContents()
+      when 'image'
+        img_data = fs.readFileSync(@getFilePath()).toString('base64')
+        @request_opts.body = img_data
+        console.log img_data
       else
         @request_opts.body = querystring.stringify(@opts)
 
