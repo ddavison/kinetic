@@ -13,3 +13,6 @@
 
 ## 0.2.2 - Fix for #7
 * Fixed #7 - Added HasteBin module.  You can now upload to HasteBin
+
+## 0.2.3 - Adding imgur support
+* You can now upload images to imgur!

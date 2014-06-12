@@ -3,11 +3,12 @@ kinetic
 
 Kinetic is a handy tool that you can use to upload your code to remote sources!
 
-The name "kinetic" was inspired from the physical sense, where the energy of force moves and object.
+The name "kinetic" was inspired from the physical sense, where the energy of force moves an object.
 
 ## Current Available Modules
 * HasteBin
 * GitHub Gist
+* Imgur
 * PasteBin
 
 # To Use
@@ -26,7 +27,6 @@ The name "kinetic" was inspired from the physical sense, where the energy of for
 ![Observe](https://raw.githubusercontent.com/ddavison/kinetic/master/images/observe-gist.png)
 
 ## Modular
-
 This project was built with modularity in mind.
 
 PasteBin, is just one of the many potential use cases for this package.
