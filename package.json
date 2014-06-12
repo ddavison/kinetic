@@ -1,7 +1,7 @@
 {
   "name": "kinetic",
   "main": "./lib/kinetic",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Share your code to an internet source",
   "repository": "https://github.com/ddavison/kinetic",
   "license": "MIT",
