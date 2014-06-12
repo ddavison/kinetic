@@ -17,7 +17,7 @@ class KineticModule
     @param opts the api options to use
   ###
   constructor: (url, api_type, opts) ->
-    @opts = opts
+    @opts = if opts then opts else {}
     @api_type = api_type
     @request_opts =
       'url': url,
@@ -95,6 +95,8 @@ class KineticModule
         @request_opts.json = @opts
       when 'form'
         @request_opts.form = @opts
+      when 'text'
+        @request_opts.body = @getFileContents()
       else
         @request_opts.body = querystring.stringify(@opts)
 
