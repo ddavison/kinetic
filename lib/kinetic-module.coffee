@@ -107,7 +107,6 @@ class KineticModule
       when 'image'
         img_data = fs.readFileSync(@getFilePath()).toString('base64')
         @request_opts.body = img_data
-        console.log img_data
       else
         @request_opts.body = querystring.stringify(@opts)
 
