@@ -47,7 +47,7 @@ class KineticModule
       @upload()
 
   getFileContents: ->
-    atom.workspace.getActiveEditor().getSelectedText() ? atom.workspace.getActiveEditor().buffer.cachedText
+    atom.workspace.getActiveEditor().buffer.cachedText
 
   getFileName: ->
     atom.workspaceView.find('.tab-bar .tab.active > div[data-name]').attr('data-name')
