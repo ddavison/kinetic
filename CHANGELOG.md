@@ -16,3 +16,6 @@
 
 ## 0.2.3 - Adding imgur support
 * You can now upload images to imgur!
+
+## 0.2.4 - Fixing broken fs dependency
+* Fixed #9/#10
